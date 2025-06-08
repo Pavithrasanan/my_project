@@ -1,0 +1,33 @@
+version: "3"
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "3000:3000"
+    networks:
+      - chatnet
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    networks:
+      - chatnet
+
+  jenkins:
+    build: ./jenkins        # folder name should be lowercase, consistent with folder name
+    ports:
+      - "8081:8080"         # fixed port typo (was 80802)
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - jenkins_home:/var/jenkins_home   # fixed volume typo
+    networks:
+      - chatnet
+
+volumes:
+  jenkins_home:             # fixed volume typo
+
+networks:
+  chatnet:                  # fixed networks typo
+

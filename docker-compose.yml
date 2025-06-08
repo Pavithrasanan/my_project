@@ -7,20 +7,20 @@ services:
     ports:
       - 2375:2375
     network:
-     -jenkins_net
+     - jenkins_net
   backend:
     build: ./backend
     ports:
       - "3000:3000"
     networks:
-      -jenkins_net
+      - jenkins_net
 
   frontend:
     build: ./frontend
     ports:
       - "8080:80"
     networks:
-      -jenkins_net
+      - jenkins_net
 
   jenkins:
     build: ./jenkins        # folder name should be lowercase, consistent with folder name
@@ -33,7 +33,7 @@ services:
     depends_on:
       - docker
     networks:
-      -jenkins_net
+      - jenkins_net
 
 volumes:
   jenkins_home:             # fixed volume typo

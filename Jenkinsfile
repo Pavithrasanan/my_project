@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage('Backed'){
             steps{
-                sh'docker-compose up'
+                sh'docker compose up'
                 sh'docker build -t chat-backend ./backend'
             }
         }

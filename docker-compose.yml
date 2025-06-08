@@ -22,6 +22,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - jenkins_home:/var/jenkins_home   # fixed volume typo
+    user: root
     networks:
       - chatnet
 

@@ -6,7 +6,7 @@ services:
     privileged: true
     ports:
       - 2375:2375
-    network:
+    networks:
      - jenkins_net
   backend:
     build: ./backend

@@ -1,0 +1,27 @@
+pipeline{
+    agent any
+    stages{
+        stage("Build"{
+            steps{
+                sh'npm install'
+            }
+        })
+        stage("Create docker image"){
+            steps{
+                sh 'docker build -t node_web_app .'
+            }
+        }
+        stage('Deploy to Docker'){
+            steps{
+                sh'docke run -d -p 3000:3000 --name=node_web_container node_web_app'
+            }
+        }
+
+    }
+    post{
+        always{
+            echo 'Pipeline completed'
+        }
+    }
+    
+}

@@ -13,7 +13,9 @@ pipeline{
         }
         stage('Deploy'){
             steps{
-                sh'''docker-compose --version 
+                sh'''
+                    docker --version
+                    docker-compose --version 
                     # docker ps --format '{{.ID}} {{.Names}} {{.Ports}}' | grep 2375
 
 

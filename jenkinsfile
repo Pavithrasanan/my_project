@@ -5,7 +5,7 @@ pipeline{
             steps{
                 sh'npm install'
             }
-        })
+        }
         stage("Create docker image"){
             steps{
                 sh 'docker build -t node_web_app .'

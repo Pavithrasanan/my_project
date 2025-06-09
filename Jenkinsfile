@@ -13,8 +13,10 @@ pipeline{
         }
         stage('Deploy'){
             steps{
-                sh'docker-compose --version '
-                sh'docker-compose up -d'
+                sh'''docker-compose --version 
+                sudo lsof -i :2375
+
+                 docker-compose up -d'''
             }
         }
 }

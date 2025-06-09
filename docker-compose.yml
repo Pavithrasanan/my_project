@@ -5,7 +5,7 @@ services:
     image: docker:dind
     privileged: true
     ports:
-      - 2375:2375
+      - 12345:2375
     environment:
       - DOCKER_TLS_CERTDIR=    # disables TLS setup
       - DOCKER_HOST=tcp://0.0.0.0:2375

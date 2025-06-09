@@ -14,9 +14,10 @@ pipeline{
         stage('Deploy'){
             steps{
                 sh'''docker-compose --version 
-                sudo lsof -i :2375
+                     docker ps --format '{{.ID}} {{.Names}} {{.Ports}}' | grep 2375
 
-                 docker-compose up -d'''
+
+                     docker-compose up -d'''
             }
         }
 }

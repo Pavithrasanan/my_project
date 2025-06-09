@@ -15,7 +15,8 @@ pipeline{
             steps{
                 sh'''
                     docker --version
-                    docker-compose --version 
+                    docker-compose --version
+                    docker-compose down -v --rmi all --remove-orphans 
                     # docker ps --format '{{.ID}} {{.Names}} {{.Ports}}' | grep 2375
 
 

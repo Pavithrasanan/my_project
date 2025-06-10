@@ -1,42 +1,57 @@
-pipeline{
+pipeline {
     agent any
-    stages{
-        stage("install dependencies"){
-            agent{
+
+    stages {
+        stage("Install Dependencies") {
+            agent {
                 docker {
                     image 'node:18-alpine'
                     reuseNode true
                 }
             }
-            steps{
-                sh '''npm install
-                     npm install --save-dev mocha
+            steps {
+                sh '''
+                    npm install
+                    npm install --save-dev mocha
                 '''
-
-            }
-        }
-        stage("Build"){
-            steps{
-                sh 'docker build -t node_web_app .'
-            }
-        }
-        stage("Test"){
-            steps{
-                sh'npm test'
-            }
-        }
-        stage('Deploy to Docker'){
-            steps{
-                sh'docker run -d -p 3000:3000 --name=node_web_container node_web_app'
             }
         }
 
+        stage("Build Docker Image") {
+            steps {
+                sh "docker build -t node_web_app ."
+            }
+        }
 
+        stage("Run Tests") {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh 'npm test'
+            }
+        }
+
+        stage('Deploy Container') {
+            steps {
+                sh '''
+                    docker rm -f node_web_container || true
+                    docker run -d \
+                    --name node_web_container \
+                    --network jenkins_net \
+                    -p 3000:3000 \
+                    node_web_app
+                '''
+            }
+        }
     }
-    post{
-        always{
+
+    post {
+        always {
             echo 'Pipeline completed'
         }
     }
-    
 }

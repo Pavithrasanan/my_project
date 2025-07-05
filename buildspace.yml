@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Nothing to install for static site"
+  build:
+    commands:
+      - echo "Build phase - nothing to compile"
+artifacts:
+  files:
+    - index.html
+

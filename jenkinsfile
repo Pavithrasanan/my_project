@@ -33,7 +33,7 @@ pipeline {
 Status: ${currentBuild.currentResult}
 Details: ${env.BUILD_URL}
 Check console output for more details.""",
-                to: "PAVITHRASENAN21@GMAIL.COM",
+                to: "pavithrasenan21@gmail.com",
                 attachLog: true
             )
         }

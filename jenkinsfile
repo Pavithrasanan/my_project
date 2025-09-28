@@ -1,39 +1,53 @@
 pipeline {
-    agent any  // Runs on any available agent (assumes Ubuntu/Debian)
+    agent any  
     stages {
-        stage('Install Python') {
+        stage('Install Docker') {
             steps {
-                // Update package list and install Python 3
                 sh '''
-                sudo apt-get update
-                sudo apt-get install -y python3 python3-pip
-                python3 --version
+                # Install Docker if not already installed
+                if ! command -v docker &> /dev/null; then
+                    apt-get update
+                    apt-get install -y apt-transport-https ca-certificates curl gnupg lsb-release
+                    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+                    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | tee /etc/apt/sources.list.d/docker.list > /dev/null
+                    apt-get update
+                    apt-get install -y docker-ce docker-ce-cli containerd.io
+                   
+                    service docker start || systemctl start docker
+                  
+                    docker --version
+                else
+                    echo "Docker already installed"
+                    docker --version
+                fi
                 '''
             }
         }
         stage('Checkout') {
             steps {
-                // Pull the latest code from your repository
-                git branch: 'main', url: 'https://github.com/Pavithrasanan/my_project.git'  //
+                git branch: 'Jenkins_project', url: 'https://github.com/Pavithrasanan/my_project.git'  
             }
         }
-        stage('Run Python Script') {
+        stage('Run Python Script in Docker') {
             steps {
-                // Execute the Python script
-                sh 'python3 hello.py' 
+                script {
+                    // Run python.py in a Python 3.9 Docker container
+                    docker.image('python:3.9').inside {
+                        sh 'python3 python.py'  // Assumes python.py is in repo root
+                    }
+                }
             }
         }
     }
     post {
         always {
-            // Send email notification with build status
             emailext (
                 subject: "${env.JOB_NAME} - Build #${env.BUILD_NUMBER} - ${currentBuild.currentResult}",
                 body: """Build: ${env.JOB_NAME} - #${env.BUILD_NUMBER}
 Status: ${currentBuild.currentResult}
 Details: ${env.BUILD_URL}
 Check console output for more details.""",
-                to: "pavithrasenan21@gmail.com",
+                to: "PAVITHRASENAN21@GMAIL.COM",
                 attachLog: true
             )
         }
